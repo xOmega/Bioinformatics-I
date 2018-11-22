@@ -19,49 +19,37 @@ def upgma(score_matrix, labels):
     rows = len(score_matrix)
     cols = len(score_matrix[0])
     labels = labels
-    base_score_table = np.copy(score_matrix)
     cluster_seq = []
     while rows * cols > 1:
         # Find nearest neighbours
         nearest_neighbours, distance = find_nearest_neighbours(score_matrix, labels)
         print nearest_neighbours
-        final = []
-        # Cluster them together
-        score_matrix = np.delete(score_matrix, (labels.index(nearest_neighbours[0]), labels.index(nearest_neighbours[1])), axis=0)
-        score_matrix = np.delete(score_matrix, (labels.index(nearest_neighbours[0]), labels.index(nearest_neighbours[1])), axis=1)
-        for i in nearest_neighbours:
-            if type(i) != list:
-                final.extend([i])
-            else:
-                final.extend(i)
+
         cluster_seq.append([[nearest_neighbours[0], nearest_neighbours[1]], distance])
+
+        neighbour_index_1 = labels.index(nearest_neighbours[0])
+        neighbour_index_2 = labels.index(nearest_neighbours[1])
+
+        old_labels = labels[::]
 
         for i in nearest_neighbours:
             labels.remove(i)
-        labels.append(final)
+        labels.append(nearest_neighbours)
 
         if len(labels) == 1:
             return cluster_seq
 
         new_row = []
-        flag = False
-        for i in labels[:-1]:
+        for j in labels[:-1]:
             aggr = 0
-            for j in labels[-1]:
-                if type(i) == list:
-                    flag = True
-                    for k in i:
-                        aggr += base_score_table[k][j]
-                else:
-                    aggr += base_score_table[i][j]
-            if not flag:
-                new_row.append(aggr/float(len(labels[-1])))
-            else:
-                new_row.append(aggr/float(len(labels[-1]) * len(i)))
+            aggr += score_matrix[neighbour_index_1][old_labels.index(j)]
+            aggr += score_matrix[neighbour_index_2][old_labels.index(j)]
+            new_row.append(aggr/float(2))
 
-        if flag:
-            flag = False
-
+        score_matrix = np.delete(score_matrix,
+                                 (neighbour_index_1, neighbour_index_2), axis=0)
+        score_matrix = np.delete(score_matrix,
+                                 (neighbour_index_1, neighbour_index_2), axis=1)
         score_matrix = np.vstack((score_matrix, np.array(new_row)))
         new_row = np.array([np.append(new_row, 0)])
         score_matrix = np.hstack((score_matrix, new_row.T))
