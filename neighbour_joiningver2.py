@@ -69,7 +69,6 @@ def iteration(A,labels,iter):
 
 
 node_dictionary = {}
-
 filename = "distances_jukes_cantour.txt"
 FH = open(filename,'r')
 data = FH.read().strip()
@@ -128,7 +127,7 @@ A = np.array(A)
 print A
 
 iter=0
-labels = ['Home_sapiens','Dog','Zebrafish','Chicken','Rat','Mouse','Cattle','Chimpanzee']
+labels = ['Homo_sapiens','Dog','Zebrafish','Chicken','Rat','Mouse','Cattle','Chimpanzee']
 
 while A is not None:
 	print '\n############################Iteration : ', iter, ' #########################################\n'
@@ -142,5 +141,3 @@ for i in sorted(node_dictionary.keys()):
     print i, ':  ',
     node = node_dictionary[i]
     print node
-
-
