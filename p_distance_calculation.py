@@ -472,7 +472,7 @@ for i in range(len(species)):
 			distance_scores[i][j] = np.divide(numerator,length)
 
 
-##Jukes Cantor distance. Log calculation here gives error
+##Jukes Cantor distance. 
 
 b = 19.0/20.0
 
@@ -497,7 +497,7 @@ for i in range(jukes_cantor_dist.shape[0]):
 	print
 	
 
-## Kimura protein. An alternative to Jukes Cantor. Gives log error as well
+## Kimura protein. 
 '''
 kim_protein = np.zeros((8,8))
 
@@ -513,13 +513,3 @@ print kim_protein
 '''
 
 
-
-### Tried Biopython library here. Gives zero values
-
-'''
-aln = AlignIO.read(open('sequences_subalign.aln'), 'clustal')
-print aln
-calculator = DistanceCalculator('blosum62')
-dm = calculator.get_distance(aln)
-print dm
-'''
